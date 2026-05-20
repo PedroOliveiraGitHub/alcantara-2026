@@ -297,7 +297,7 @@ const PLAYERS = [
     "nome": "A SELEÇÃO DE ALCÂNTARA",
     "raridade": "CAPA",
     "raridade_stars": "",
-    "key": "capa_jardim",
+    "key": "contracapa",
     "tipo": "capa",
     "texto": "A Seleção de Amigos de Alcântara. Amizade é o nosso Mundial. 2026."
   },
@@ -306,9 +306,9 @@ const PLAYERS = [
     "nome": "A SELEÇÃO DO JARDIM",
     "raridade": "CONTRACAPA",
     "raridade_stars": "",
-    "key": "contracapa",
+    "key": "capa_jardim",
     "tipo": "capa",
-    "texto": "Somos Jardim. Amizade sempre. Amizade é o nosso Mundial 2026."
+    "texto": "Somos Jardim. Amizade é o nosso Mundial. 2026."
   },
   {
     "num": 1,
@@ -596,35 +596,51 @@ function showPlayer(index) {
   cardWrap.classList.remove('visible');
   counterBadge.classList.remove('visible');
   document.getElementById('revealText').textContent = '';
-  document.getElementById('cursor').style.display = 'inline-block';
+  document.getElementById('cursor').style.display = 'none';
   clearTimeout(typingTimeout);
 
-  // Content
+  buildDots(index);
+
   const isCapa = p.tipo === 'capa';
-  const isLendaria = p.raridade === 'LENDÁRIA';
 
-  counterBadge.textContent = isCapa
-    ? p.raridade.toUpperCase()
-    : `CROMO ${String(index - 1).padStart(2,'0')} DE ${PLAYERS.length - 2}`;
-
-  const raridadeEl = document.getElementById('raridadeLine');
   if (isCapa) {
+    // Capa: mostrar imagem + texto imediatamente, sem suspense
+    document.getElementById('cardImg').src = IMAGES[p.key] || '';
+    document.getElementById('playerName').textContent = p.nome;
+    document.getElementById('revealText').textContent = p.texto || '';
+    document.getElementById('cursor').style.display = 'none';
+
+    cardWrap.classList.add('visible');
+    textArea.classList.add('visible');
+    counterBadge.textContent = '';
+
+    const raridadeEl = document.getElementById('raridadeLine');
     raridadeEl.textContent = '';
-    raridadeEl.className = 'raridade-line raridade-capa';
-  } else {
-    raridadeEl.textContent = `${p.raridade_stars} RARIDADE: ${p.raridade} ${p.raridade_stars}`;
-    raridadeEl.className = 'raridade-line ' + (isLendaria ? 'raridade-lendaria' : 'raridade-epica');
+
+    const flash = document.getElementById('cardFlash');
+    flash.classList.add('flash');
+    setTimeout(() => flash.classList.remove('flash'), 500);
+    return;
   }
 
-  document.getElementById('playerName').textContent = p.nome;
-  document.getElementById('cardImg').src = IMAGES[p.key] || '';
+  // Cromos normais
+  const isLendaria = p.raridade === 'LENDÁRIA';
+  counterBadge.textContent = `CROMO ${String(index - 1).padStart(2,'0')} DE ${PLAYERS.length - 2}`;
 
-  buildDots(index);
+  const raridadeEl = document.getElementById('raridadeLine');
+  raridadeEl.textContent = `${p.raridade_stars} RARIDADE: ${p.raridade} ${p.raridade_stars}`;
+  raridadeEl.className = 'raridade-line ' + (isLendaria ? 'raridade-lendaria' : 'raridade-epica');
+
+  document.getElementById('playerName').textContent = p.nome;
+  document.getElementById('cardImg').src = IMAGES[p.key_original] || IMAGES[p.key] || '';
 
   // Animate
   setTimeout(() => counterBadge.classList.add('visible'), 200);
   setTimeout(() => textArea.classList.add('visible'), 500);
-  setTimeout(() => typeText(p.texto, index), 900);
+  setTimeout(() => {
+    document.getElementById('cursor').style.display = 'inline-block';
+    typeText(p.texto, index);
+  }, 900);
 }
 
 function typeText(text, playerIndex) {
