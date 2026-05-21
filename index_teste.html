@@ -396,21 +396,7 @@ Dificuldade de coleção: nenhuma. Está no Egas. Sempre esteve.",
     "raridade_stars": "⭐⭐⭐⭐⭐⭐",
     "key": "s_tiago_maia",
     "tipo": "cromo",
-    "texto": "O nome já é um cromo. A pessoa é um espetáculo completo.
-
-Tem uma dificuldade clínica em não fazer um trocadilho — especialmente se for virado para a marotice. O timing é perfeito, a cara é de inocência total. Ninguém acredita.
-
-Anda com um estilo que Charlie Chaplin reconheceria como seu — e com a mesma graça que desarmava qualquer sala. Involuntário. Por isso resulta.
-
-Contabilista de mão cheia — gere as suas contas com uma precisão cirúrgica que contrasta olimpicamente com tudo o resto da sua existência.
-
-Faz bodyboard — uma vez por ano, condições perfeitas, astros alinhados e principalmente motivação suficiente para abandonar a cama, o que por si é raro. O caparro, esse, é lendário. Visto de lado apresenta uma lomba na zona abdominal que as câmaras municipais já deviam ter sinalizado.
-
-Abre minis com uma cerimónia e perícia que é uma arte. Faz a festa em qualquer lado, maneja drones e câmara com um estilo que não se aprende — e tem o privilégio raro de andar com estrelas da televisão portuguesa.
-
-Adora um beliscão e um beijo na boca sem aviso prévio. É a sua linguagem do amor.
-
-Dificuldade de coleção: zero. Ele já te deu um beijo na boca antes de te apresentares.",
+    "texto": "O nome já é um cromo. A pessoa é um espetáculo completo. Tem uma dificuldade clínica em não fazer um trocadilho — especialmente se for virado para a marotice. O timing é perfeito, a cara é de inocência total. Ninguém acredita. Anda com um estilo que Charlie Chaplin reconheceria como seu — e com a mesma graça que desarmava qualquer sala. Involuntário. Por isso resulta. Contabilista de mão cheia — gere as suas contas com uma precisão cirúrgica que contrasta olimpicamente com tudo o resto da sua existência. Faz bodyboard — uma vez por ano, condições perfeitas, astros alinhados e principalmente motivação suficiente para abandonar a cama, o que por si é raro. O caparro, esse, é lendário. Visto de lado apresenta uma lomba na zona abdominal que as câmaras municipais já deviam ter sinalizado. Abre minis com uma cerimónia e perícia que é uma arte. Faz a festa em qualquer lado, maneja drones e câmara com um estilo que não se aprende — e tem o privilégio raro de andar com estrelas da televisão portuguesa. Adora um beliscão e um beijo na boca sem aviso prévio. É a sua linguagem do amor. Dificuldade de coleção: zero. Ele já te deu um beijo na boca antes de te apresentares.",
     "key_original": "o_tiago_maia"
   },
   {
@@ -608,12 +594,12 @@ Dificuldade de coleção: média. Está sempre entre uma viagem, uma onda, uma j
 const IMAGES = {};
 IMAGES["capa_jardim"] = "capa_jardim.png";
 IMAGES["contracapa"] = "contracapa.jpg";
-IMAGES["s_ana_ribeiro"] = "s_ana_ribeiro.jpg";
-IMAGES["s_carla_agoas"] = "s_carla_agoas.jpg";
-IMAGES["s_isabel_bairao"] = "s_isabel_bairao.jpg";
+IMAGES["s_ana_ribeiro"] = "s_ana_ribeiro.png";
+IMAGES["s_carla_agoas"] = "s_carla_agoas.png";
+IMAGES["s_isabel_bairao"] = "s_isabel_bairao.png";
 IMAGES["s_joana_frade"] = "s_joana_frade.jpg";
 IMAGES["s_joao_santos"] = "s_joao_santos.png";
-IMAGES["s_liliana_martins"] = "s_liliana_martins.jpg";
+IMAGES["s_liliana_martins"] = "s_liliana_martins.png";
 IMAGES["s_luis_justino"] = "s_luis_justino.png";
 IMAGES["s_sofia_afonso"] = "s_sofia_afonso.png";
 IMAGES["s_pedro_oliveira"] = "s_pedro_oliveira.png";
@@ -762,6 +748,11 @@ function showPlayer(index) {
             imgCromo.style.opacity = '0';
             setTimeout(function() {
               if (currentIndex !== playerIndex) return;
+              imgCromo.onerror = function() {
+                // Special sticker failed to load - keep original
+                imgCromo.src = srcOrig;
+                imgCromo.onerror = null;
+              };
               imgCromo.src = srcEsp;
               imgCromo.style.opacity = '1';
               especialLabel.textContent = '✦ CROMO ESPECIAL ✦';
