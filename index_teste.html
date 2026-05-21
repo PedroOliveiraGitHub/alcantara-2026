@@ -206,6 +206,9 @@ html, body {
     </div>
   </div>
 
+  <div class="btn-anterior-wrap" id="btnAnteriorWrap" style="display:none;margin-top:16px;">
+    <button class="btn-nav" onclick="verAnterior()">◀ VER ANTERIOR</button>
+  </div>
   <div class="nav-dots" id="navDots"></div>
   <div class="completed-banner" id="completedBanner">🏆 TODOS OS CROMOS REVELADOS · AMIZADE É O NOSSO MUNDIAL 🏆</div>
   <div class="nav-buttons" id="navButtons">
@@ -501,9 +504,17 @@ function showPlayer(index) {
     document.getElementById('capaImg').src = IMAGES[p.key] || '';
     document.getElementById('capaText').textContent = p.texto || '';
     document.getElementById('progressLabel').textContent = '';
-    document.getElementById('progressLabel').textContent = '';
     flash(false);
-    scheduleNext();
+    // Se for a última capa (fim do show), mostrar botões
+    if (index >= PLAYERS.length - 1) {
+      allRevealed = true;
+      buildDots();
+      document.getElementById('completedBanner').classList.add('visible');
+      document.getElementById('navButtons').classList.add('visible');
+      document.getElementById('progressFill').style.width = '100%';
+    } else {
+      scheduleNext();
+    }
     return;
   }
 
@@ -569,6 +580,8 @@ function showPlayer(index) {
               imgCromo.style.opacity = '1';
               especialLabel.textContent = '✦ CROMO ESPECIAL ✦';
               especialLabel.classList.add('visible');
+              lastRevealedIndex = index;
+              updateAnteriorBtn(currentIndex);
             }, 500);
           }
         }, 300);
@@ -577,6 +590,7 @@ function showPlayer(index) {
   }
   type();
   scheduleNext();
+  updateAnteriorBtn(index);
 }
 
 function scheduleNext() {
@@ -605,8 +619,58 @@ function scheduleNext() {
   }, INTERVAL_MS);
 }
 
+function verAnterior() {
+  clearTimeout(autoTimer);
+  clearInterval(progressTimer);
+  document.getElementById('progressFill').style.width = '0%';
+  if (lastRevealedIndex >= 0) showRevealed(lastRevealedIndex);
+}
+
+function showRevealed(index) {
+  // Show a fully revealed cromo (original already flipped to special)
+  var p = PLAYERS[index];
+  currentIndex = index;
+  buildDots();
+
+  var capaWrap = document.getElementById('capaWrap');
+  var cromoWrap = document.getElementById('cromoWrap');
+  capaWrap.classList.remove('active');
+  cromoWrap.classList.add('active');
+
+  var total = PLAYERS.filter(function(x){ return x.tipo !== 'capa'; }).length;
+  var num = PLAYERS.slice(0, index + 1).filter(function(x){ return x.tipo !== 'capa'; }).length;
+  document.getElementById('counterBadge').textContent = 'CROMO ' + String(num).padStart(2,'0') + ' DE ' + total;
+
+  // Show special sticker directly
+  var imgCromo = document.getElementById('imgCromo');
+  var especialLabel = document.getElementById('especialLabel');
+  var srcEsp = (p.key && IMAGES[p.key]) ? IMAGES[p.key] : '';
+  var srcOrig = (p.key_original && IMAGES[p.key_original]) ? IMAGES[p.key_original] : '';
+  imgCromo.style.transition = 'none';
+  imgCromo.src = '';  // clear first to force reload
+  setTimeout(function() {
+    imgCromo.src = srcEsp || srcOrig;
+    imgCromo.style.opacity = '1';
+    imgCromo.style.transform = 'scale(1) translateY(0)';
+  }, 20);
+  especialLabel.textContent = srcEsp ? '✦ CROMO ESPECIAL ✦' : '';
+  especialLabel.classList.add('visible');
+
+  // Show text fully
+  document.getElementById('revealText').textContent = p.texto || '';
+  document.getElementById('cursor').style.display = 'none';
+
+  // Update anterior button visibility
+  updateAnteriorBtn(index);
+}
+
 function nextPlayer() { showPlayer((currentIndex + 1) % PLAYERS.length); }
 function prevPlayer() { showPlayer((currentIndex - 1 + PLAYERS.length) % PLAYERS.length); }
+
+function updateAnteriorBtn(index) {
+  var wrap = document.getElementById('btnAnteriorWrap');
+  wrap.style.display = (!allRevealed && lastRevealedIndex >= 0) ? 'block' : 'none';
+}
 
 window.addEventListener('load', function(){ showPlayer(0); });
 
