@@ -1,4 +1,3 @@
-<!-- v5 -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -7,192 +6,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seleção do Jardim 2026</title>
 <style>
-
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body {
-  width:100%; min-height:100vh;
-  background:#0a0800; color:#FFD700;
-  font-family: Impact, 'Arial Black', sans-serif;
-  overflow-x:hidden;
-}
-
-/* HEADER */
-.header {
-  width:100%; text-align:center;
-  padding:20px 16px 12px;
-  border-bottom:1px solid rgba(255,215,0,0.2);
-  background:linear-gradient(180deg,rgba(255,215,0,0.05) 0%,transparent 100%);
-}
+html, body { width:100%; min-height:100vh; background:#0a0800; color:#FFD700; font-family:Impact,"Arial Black",sans-serif; overflow-x:hidden; }
+.header { width:100%; text-align:center; padding:20px 16px 12px; border-bottom:1px solid rgba(255,215,0,0.2); background:linear-gradient(180deg,rgba(255,215,0,0.05),transparent); }
 .header-sub { font-size:10px; letter-spacing:5px; color:rgba(255,215,0,0.4); font-family:Georgia,serif; }
 .header-title { font-size:clamp(28px,6vw,56px); letter-spacing:8px; text-shadow:0 0 40px rgba(255,215,0,0.4); }
 .header-meta { font-size:10px; letter-spacing:4px; color:rgba(255,215,0,0.3); margin-top:4px; font-family:Georgia,serif; }
-
-/* PROGRESS */
 .progress-wrap { width:100%; max-width:1000px; margin:0 auto; padding:10px 24px 0; }
 .progress-bar { width:100%; height:2px; background:rgba(255,215,0,0.1); border-radius:2px; }
 .progress-fill { height:100%; background:linear-gradient(90deg,#B8860B,#FFD700); border-radius:2px; width:0%; transition:width 0.5s linear; }
-.progress-label { display:none; }
-
-/* STAGE */
-.stage {
-  width:100%; max-width:1000px;
-  margin:0 auto;
-  padding:20px 24px 60px;
-  min-height:80vh;
-  display:flex; flex-direction:column; align-items:center;
-}
-
-/* CAPA */
+.stage { width:100%; max-width:1000px; margin:0 auto; padding:20px 24px 60px; min-height:80vh; display:flex; flex-direction:column; align-items:center; }
 #capaWrap { display:none; width:100%; max-width:800px; border-radius:16px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,0.9),0 0 60px rgba(255,215,0,0.1); }
 #capaWrap.active { display:block; animation:fadeIn 0.8s ease; }
 #capaImg { width:100%; display:block; }
 .capa-text { text-align:center; padding:16px; font-family:Georgia,serif; font-size:15px; color:rgba(255,215,0,0.7); letter-spacing:2px; font-style:italic; }
-
-/* CROMO WRAP */
 #cromoWrap { display:none; width:100%; }
 #cromoWrap.active { display:block; animation:fadeIn 0.5s ease; }
-
 .cromo-header { text-align:center; margin-bottom:20px; }
 .counter-badge { font-size:11px; letter-spacing:5px; color:rgba(255,215,0,0.4); font-family:Georgia,serif; }
-.raridade-line { font-size:11px; letter-spacing:3px; margin-top:4px; }
-.raridade-epica { color:#FFD700; }
-.raridade-lendaria { color:#FF8C00; }
-.player-name { font-size:clamp(22px,4vw,40px); letter-spacing:6px; text-shadow:0 0 30px rgba(255,215,0,0.5); }
-.alcunha { font-size:12px; letter-spacing:4px; color:#FF8C00; font-family:Georgia,serif; font-style:italic; min-height:18px; margin-top:2px; }
-
-/* 2 COLUNAS */
-.two-col {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:24px;
-  width:100%;
-  align-items:start;
-}
-
-/* COLUNA ESQUERDA — texto */
-.col-texto {
-  padding:20px;
-  background:rgba(255,215,0,0.03);
-  border:1px solid rgba(255,215,0,0.1);
-  border-radius:12px;
-  min-height:420px;
-  font-family:Georgia,serif;
-  font-size:14px; line-height:1.9;
-  color:rgba(255,255,255,0.82);
-}
-.cursor {
-  display:inline-block; width:2px; height:1em;
-  background:#FFD700; vertical-align:middle;
-  animation:blink 0.7s step-end infinite;
-}
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:24px; width:100%; align-items:start; }
+.col-texto { padding:20px; background:rgba(255,215,0,0.03); border:1px solid rgba(255,215,0,0.1); border-radius:12px; min-height:420px; font-family:Georgia,serif; font-size:14px; line-height:1.9; color:rgba(255,255,255,0.82); }
+.cursor { display:inline-block; width:2px; height:1em; background:#FFD700; vertical-align:middle; animation:blink 0.7s step-end infinite; }
 @keyframes blink { 50% { opacity:0; } }
-
-/* COLUNA DIREITA — cromo (original → especial) */
-.col-cromo {
-  display:flex; flex-direction:column; align-items:center;
-  position:relative;
-}
-
-.card-wrap {
-  width:100%; border-radius:12px;
-  box-shadow:0 20px 50px rgba(0,0,0,0.8);
-  position:relative;
-}
-
-#imgCromo {
-  width:100%; display:block;
-  border-radius:12px;
-  opacity:0;
-  transform:scale(0.93) translateY(18px);
-  transition:opacity 0.6s ease, transform 0.6s ease;
-}
-
-.especial-label {
-  font-size:10px; letter-spacing:4px; color:rgba(255,215,0,0.5);
-  margin-top:10px; font-family:Georgia,serif;
-  opacity:0; transition:opacity 0.5s ease;
-  text-align:center;
-}
+.col-cromo { display:flex; flex-direction:column; align-items:center; }
+.card-wrap { width:100%; border-radius:12px; box-shadow:0 20px 50px rgba(0,0,0,0.8); position:relative; }
+#imgCromo { width:100%; display:block; border-radius:12px; opacity:0; transform:scale(0.93) translateY(18px); }
+.especial-label { font-size:10px; letter-spacing:4px; color:rgba(255,215,0,0.5); margin-top:10px; font-family:Georgia,serif; opacity:0; transition:opacity 0.5s ease; text-align:center; }
 .especial-label.visible { opacity:1; }
-
-/* FLASH */
-.flash-overlay {
-  position:fixed; inset:0; pointer-events:none; z-index:999; opacity:0;
-}
+.flash-overlay { position:fixed; inset:0; pointer-events:none; z-index:999; opacity:0; }
 .flash-overlay.flash { animation:flashAnim 0.4s ease-out forwards; }
 .flash-overlay.flash-epic { animation:flashEpic 0.8s ease-out forwards; }
 @keyframes flashAnim { 0%{opacity:0;background:white} 40%{opacity:0.7} 100%{opacity:0} }
-@keyframes flashEpic {
-  0%{opacity:0}
-  15%{opacity:1;background:radial-gradient(circle,#fff 0%,#FFD700 40%,#FF8C00 70%,transparent 100%)}
-  60%{opacity:0.6}
-  100%{opacity:0}
-}
+@keyframes flashEpic { 0%{opacity:0} 15%{opacity:1;background:radial-gradient(circle,#fff 0%,#FFD700 40%,#FF8C00 70%,transparent 100%)} 60%{opacity:0.6} 100%{opacity:0} }
 @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-
-/* NAV DOTS */
+.btn-anterior-wrap { display:none; gap:12px; justify-content:center; margin-top:16px; }
 .nav-dots { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:24px; }
 .dot { width:10px; height:10px; border-radius:50%; background:rgba(255,215,0,0.2); transition:all 0.3s; cursor:default; }
 .dot.active-dot { background:#FFD700; transform:scale(1.3); }
 .dot.done { background:rgba(255,215,0,0.45); }
 .dot.clickable { cursor:pointer; }
 .dot.clickable:hover { background:#FFD700; transform:scale(1.2); }
-
-/* COMPLETED */
-.completed-banner {
-  display:none; text-align:center;
-  font-size:12px; letter-spacing:4px;
-  color:#FFD700; padding:20px;
-  border:1px solid rgba(255,215,0,0.3);
-  border-radius:8px; margin-top:20px;
-  font-family:Georgia,serif;
-}
+.completed-banner { display:none; text-align:center; font-size:12px; letter-spacing:4px; color:#FFD700; padding:20px; border:1px solid rgba(255,215,0,0.3); border-radius:8px; margin-top:20px; font-family:Georgia,serif; }
 .completed-banner.visible { display:block; animation:fadeIn 1s ease; }
 .nav-buttons { display:none; gap:16px; margin-top:16px; justify-content:center; }
 .nav-buttons.visible { display:flex; }
-.btn-nav {
-  background:rgba(255,215,0,0.08);
-  border:1px solid rgba(255,215,0,0.4);
-  color:#FFD700; padding:12px 28px; border-radius:8px;
-  font-family:Impact,sans-serif; font-size:14px; letter-spacing:3px;
-  cursor:pointer; transition:all 0.2s;
-}
+.btn-nav { background:rgba(255,215,0,0.08); border:1px solid rgba(255,215,0,0.4); color:#FFD700; padding:12px 28px; border-radius:8px; font-family:Impact,sans-serif; font-size:14px; letter-spacing:3px; cursor:pointer; transition:all 0.2s; }
 .btn-nav:hover { background:rgba(255,215,0,0.18); transform:translateY(-1px); }
-
-/* MOBILE */
-@media(max-width:650px) {
-  .two-col { grid-template-columns:1fr; gap:16px; }
-  .col-texto { min-height:auto; }
-}
-
+@media(max-width:650px) { .two-col { grid-template-columns:1fr; gap:16px; } .col-texto { min-height:auto; } }
 </style>
 </head>
 <body>
-
 <div class="header">
-  <div class="header-sub">★ EDIÇÃO ESPECIAL ★</div>
+  <div class="header-sub">&#9733; EDIÇÃO ESPECIAL &#9733;</div>
   <div class="header-title">SELEÇÃO DO JARDIM</div>
-  <div class="header-meta">FIFA WORLD CUP 2026 · REVELAÇÃO DE CROMOS</div>
+  <div class="header-meta">FIFA WORLD CUP 2026 &middot; REVELAÇÃO DE CROMOS</div>
 </div>
-
 <div class="progress-wrap">
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-  <div class="progress-label" id="progressLabel">A INICIAR...</div>
 </div>
-
 <div class="stage">
-
   <div id="capaWrap">
     <img id="capaImg" src="" alt="">
     <div class="capa-text" id="capaText"></div>
   </div>
-
   <div id="cromoWrap">
     <div class="cromo-header">
       <div class="counter-badge" id="counterBadge"></div>
-
     </div>
-
     <div class="two-col">
       <div class="col-texto">
         <span id="revealText"></span><span class="cursor" id="cursor" style="display:none"></span>
@@ -205,21 +85,18 @@ html, body {
       </div>
     </div>
   </div>
-
-  <div class="btn-anterior-wrap" id="btnAnteriorWrap" style="display:none;margin-top:16px;gap:12px;justify-content:center;">
-    <button class="btn-nav" onclick="verAnterior()">◀ VER ANTERIOR</button>
-    <button class="btn-nav" id="btnContinuar" style="display:none;" onclick="continuar()">CONTINUAR ▶</button>
+  <div class="btn-anterior-wrap" id="btnAnteriorWrap">
+    <button class="btn-nav" onclick="verAnterior()">&#9664; VER ANTERIOR</button>
+    <button class="btn-nav" id="btnContinuar" style="display:none" onclick="continuar()">CONTINUAR &#9654;</button>
   </div>
   <div class="nav-dots" id="navDots"></div>
-  <div class="completed-banner" id="completedBanner">🏆 TODOS OS CROMOS REVELADOS · AMIZADE É O NOSSO MUNDIAL 🏆</div>
+  <div class="completed-banner" id="completedBanner">&#127942; TODOS OS CROMOS REVELADOS &middot; AMIZADE É O NOSSO MUNDIAL &#127942;</div>
   <div class="nav-buttons" id="navButtons">
-    <button class="btn-nav" onclick="prevPlayer()">◀ ANTERIOR</button>
-    <button class="btn-nav" onclick="nextPlayer()">PRÓXIMO ▶</button>
+    <button class="btn-nav" onclick="prevPlayer()">&#9664; ANTERIOR</button>
+    <button class="btn-nav" onclick="nextPlayer()">PRÓXIMO &#9654;</button>
   </div>
 </div>
-
 <div class="flash-overlay" id="flashOverlay"></div>
-
 <script>
 const PLAYERS = [
   {
@@ -591,18 +468,18 @@ Dificuldade de coleção: média. Está sempre entre uma viagem, uma onda, uma j
     "texto": "A Seleção de Amigos de Alcântara. Amizade é o nosso Mundial. 2026."
   }
 ];
+
 const IMAGES = {};
 IMAGES["capa_jardim"] = "capa_jardim.png";
 IMAGES["contracapa"] = "contracapa.jpg";
 IMAGES["s_ana_ribeiro"] = "s_ana_ribeiro.png";
 IMAGES["s_carla_agoas"] = "s_carla_agoas.png";
 IMAGES["s_isabel_bairao"] = "s_isabel_bairao.png";
-IMAGES["s_joana_frade"] = "s_joana_frade.jpg";
+IMAGES["s_joana_frade"] = "s_joana_frade.png";
 IMAGES["s_joao_santos"] = "s_joao_santos.png";
 IMAGES["s_liliana_martins"] = "s_liliana_martins.png";
 IMAGES["s_luis_justino"] = "s_luis_justino.png";
 IMAGES["s_sofia_afonso"] = "s_sofia_afonso.png";
-IMAGES["s_pedro_oliveira"] = "s_pedro_oliveira.png";
 IMAGES["s_pedro_oliveira"] = "s_pedro_oliveira.png";
 IMAGES["s_tiago_maia"] = "s_tiago_maia.png";
 IMAGES["s_silvia_pinto"] = "s_silvia_pinto.png";
@@ -632,29 +509,31 @@ IMAGES["o_marco_silva"] = "o_marco_silva.png";
 IMAGES["o_tania"] = "o_tania.png";
 IMAGES["s_tania"] = "s_tania.png";
 
-const INTERVAL_MS = 2 * 60 * 1000;
-let currentIndex = 0;
-let allRevealed = false;
-let autoTimer = null;
-let typingTimeout = null;
-let progressTimer = null;
+var INTERVAL_MS = 2 * 60 * 1000;
+var currentIndex = 0;
+var allRevealed = false;
+var autoTimer = null;
+var typingTimeout = null;
+var progressTimer = null;
+var lastRevealedIndex = -1;
+var nextToReveal = 0;
 
 function flash(epic) {
   var el = document.getElementById('flashOverlay');
   el.className = 'flash-overlay ' + (epic ? 'flash-epic' : 'flash');
-  setTimeout(function(){ el.className = 'flash-overlay'; }, epic ? 800 : 400);
+  setTimeout(function() { el.className = 'flash-overlay'; }, epic ? 800 : 400);
 }
 
 function buildDots() {
   var container = document.getElementById('navDots');
   container.innerHTML = '';
-  PLAYERS.forEach(function(p, i) {
-    if (p.tipo === 'capa') return;
+  for (var i = 0; i < PLAYERS.length; i++) {
+    if (PLAYERS[i].tipo === 'capa') continue;
     var dot = document.createElement('div');
     dot.className = 'dot' + (i === currentIndex ? ' active-dot' : '') + (i < currentIndex ? ' done' : '') + (allRevealed ? ' clickable' : '');
-    if (allRevealed) { (function(idx){ dot.onclick = function(){ showPlayer(idx); }; })(i); }
+    if (allRevealed) { (function(idx) { dot.onclick = function() { showPlayer(idx); }; })(i); }
     container.appendChild(dot);
-  });
+  }
 }
 
 function showPlayer(index) {
@@ -665,6 +544,8 @@ function showPlayer(index) {
   clearTimeout(typingTimeout);
   clearInterval(progressTimer);
   buildDots();
+  document.getElementById('btnAnteriorWrap').style.display = 'none';
+  document.getElementById('btnContinuar').style.display = 'none';
 
   var capaWrap = document.getElementById('capaWrap');
   var cromoWrap = document.getElementById('cromoWrap');
@@ -673,10 +554,8 @@ function showPlayer(index) {
     capaWrap.classList.add('active');
     cromoWrap.classList.remove('active');
     document.getElementById('capaImg').src = IMAGES[p.key] || '';
-    document.getElementById('capaText').textContent = p.texto || '';
-    document.getElementById('progressLabel').textContent = '';
+    document.getElementById('capaText').textContent = p.key === 'contracapa' ? (p.texto || '') : '';
     flash(false);
-    // Se for a última capa (fim do show), mostrar botões
     if (index >= PLAYERS.length - 1) {
       allRevealed = true;
       buildDots();
@@ -692,14 +571,16 @@ function showPlayer(index) {
   capaWrap.classList.remove('active');
   cromoWrap.classList.add('active');
 
-  // Header
-  var total = PLAYERS.filter(function(x){ return x.tipo !== 'capa'; }).length;
-  var num = PLAYERS.slice(0, index + 1).filter(function(x){ return x.tipo !== 'capa'; }).length;
-  document.getElementById('counterBadge').textContent = 'CROMO ' + String(num).padStart(2,'0') + ' DE ' + total;
+  var total = 0;
+  var num = 0;
+  for (var i = 0; i < PLAYERS.length; i++) {
+    if (PLAYERS[i].tipo !== 'capa') {
+      total++;
+      if (i <= index) num++;
+    }
+  }
+  document.getElementById('counterBadge').textContent = 'CROMO ' + String(num).padStart(2, '0') + ' DE ' + total;
 
-
-
-  // Reset image
   var imgCromo = document.getElementById('imgCromo');
   var especialLabel = document.getElementById('especialLabel');
   imgCromo.style.transition = 'none';
@@ -708,15 +589,12 @@ function showPlayer(index) {
   especialLabel.textContent = '';
   especialLabel.classList.remove('visible');
 
-  // Load original
-  imgCromo.src = (p.key_original && IMAGES[p.key_original]) ? IMAGES[p.key_original] : (IMAGES[p.key] || '');
-
-  // Capture image sources NOW before any async — locked to this player
   var srcOrig = (p.key_original && IMAGES[p.key_original]) ? IMAGES[p.key_original] : '';
-  var srcEsp  = (p.key && IMAGES[p.key]) ? IMAGES[p.key] : '';
-  var playerIndex = index; // lock index for all closures
+  var srcEsp = (p.key && IMAGES[p.key]) ? IMAGES[p.key] : '';
+  var playerIndex = index;
 
-  // Typewriter
+  imgCromo.src = srcOrig || srcEsp;
+
   var textEl = document.getElementById('revealText');
   var cursor = document.getElementById('cursor');
   textEl.textContent = '';
@@ -732,46 +610,44 @@ function showPlayer(index) {
     if (i < text.length) {
       textEl.textContent += text[i++];
       var progress = i / text.length;
-      imgCromo.style.opacity = progress.toFixed(3);
+      imgCromo.style.opacity = String(progress.toFixed(3));
       imgCromo.style.transform = 'scale(' + (0.93 + progress * 0.07).toFixed(3) + ') translateY(' + ((1 - progress) * 18).toFixed(1) + 'px)';
       typingTimeout = setTimeout(type, speed);
     } else {
       cursor.style.display = 'none';
       imgCromo.style.opacity = '1';
       imgCromo.style.transform = 'scale(1) translateY(0)';
-      setTimeout(function() {
-        if (currentIndex !== playerIndex) return;
-        flash(true);
+      if (srcEsp && srcEsp !== srcOrig) {
         setTimeout(function() {
           if (currentIndex !== playerIndex) return;
-          if (srcEsp) {
+          flash(true);
+          setTimeout(function() {
+            if (currentIndex !== playerIndex) return;
             imgCromo.style.transition = 'opacity 0.5s ease';
             imgCromo.style.opacity = '0';
             setTimeout(function() {
               if (currentIndex !== playerIndex) return;
-              imgCromo.onerror = function() {
-                // Special sticker failed to load - keep original
-                imgCromo.src = srcOrig;
-                imgCromo.onerror = null;
-              };
               imgCromo.src = srcEsp;
               imgCromo.style.opacity = '1';
-              especialLabel.textContent = '✦ CROMO ESPECIAL ✦';
+              especialLabel.textContent = '✶ CROMO ESPECIAL ✶';
               especialLabel.classList.add('visible');
               lastRevealedIndex = playerIndex;
               if (!allRevealed) {
                 document.getElementById('btnAnteriorWrap').style.display = 'flex';
               }
             }, 500);
-          }
-        }, 300);
-      }, 800);
+          }, 300);
+        }, 800);
+      } else {
+        lastRevealedIndex = playerIndex;
+        if (!allRevealed) {
+          document.getElementById('btnAnteriorWrap').style.display = 'flex';
+        }
+      }
     }
   }
   type();
   scheduleNext();
-  document.getElementById('btnContinuar').style.display = 'none';
-  document.getElementById('btnAnteriorWrap').style.display = 'none';
 }
 
 function scheduleNext() {
@@ -784,7 +660,6 @@ function scheduleNext() {
     buildDots();
     document.getElementById('completedBanner').classList.add('visible');
     document.getElementById('navButtons').classList.add('visible');
-    document.getElementById('progressLabel').textContent = '✦ TODOS OS CROMOS REVELADOS ✦';
     document.getElementById('progressFill').style.width = '100%';
     return;
   }
@@ -808,71 +683,41 @@ function verAnterior() {
 }
 
 function showRevealed(index) {
-  // Show a fully revealed cromo (original already flipped to special)
   var p = PLAYERS[index];
   currentIndex = index;
   buildDots();
-
-  var capaWrap = document.getElementById('capaWrap');
-  var cromoWrap = document.getElementById('cromoWrap');
-  capaWrap.classList.remove('active');
-  cromoWrap.classList.add('active');
-
-  var total = PLAYERS.filter(function(x){ return x.tipo !== 'capa'; }).length;
-  var num = PLAYERS.slice(0, index + 1).filter(function(x){ return x.tipo !== 'capa'; }).length;
+  document.getElementById('capaWrap').classList.remove('active');
+  document.getElementById('cromoWrap').classList.add('active');
+  var total = 0; var num = 0;
+  for (var i = 0; i < PLAYERS.length; i++) {
+    if (PLAYERS[i].tipo !== 'capa') { total++; if (i <= index) num++; }
+  }
   document.getElementById('counterBadge').textContent = 'CROMO ' + String(num).padStart(2,'0') + ' DE ' + total;
-
-  // Show special sticker — lock src to this player's key
   var imgCromo = document.getElementById('imgCromo');
   var especialLabel = document.getElementById('especialLabel');
-  var revSrcEsp = (p.key && IMAGES[p.key]) ? IMAGES[p.key] : '';
-  var revSrcOrig = (p.key_original && IMAGES[p.key_original]) ? IMAGES[p.key_original] : '';
-  var revSrc = revSrcEsp || revSrcOrig;
+  var revSrc = (p.key && IMAGES[p.key]) ? IMAGES[p.key] : ((p.key_original && IMAGES[p.key_original]) ? IMAGES[p.key_original] : '');
   imgCromo.style.transition = 'none';
   imgCromo.style.opacity = '0';
   imgCromo.src = revSrc;
-  imgCromo.onload = function() {
-    imgCromo.style.opacity = '1';
-    imgCromo.style.transform = 'scale(1) translateY(0)';
-  };
-  // Fallback if already cached
-  if (imgCromo.complete) {
-    imgCromo.style.opacity = '1';
-    imgCromo.style.transform = 'scale(1) translateY(0)';
-  }
-  especialLabel.textContent = srcEsp ? '✦ CROMO ESPECIAL ✦' : '';
-  especialLabel.classList.add('visible');
-
-  // Show text fully
+  imgCromo.onload = function() { imgCromo.style.opacity = '1'; imgCromo.style.transform = 'scale(1) translateY(0)'; imgCromo.onload = null; };
+  if (imgCromo.complete && imgCromo.src) { imgCromo.style.opacity = '1'; imgCromo.style.transform = 'scale(1) translateY(0)'; }
+  especialLabel.textContent = (p.key && IMAGES[p.key]) ? '✶ CROMO ESPECIAL ✶' : '';
+  if (especialLabel.textContent) especialLabel.classList.add('visible');
   document.getElementById('revealText').textContent = p.texto || '';
   document.getElementById('cursor').style.display = 'none';
-
-  // Show continuar button if there are more cromos to reveal
-  var btnC = document.getElementById('btnContinuar');
-  if (nextToReveal < PLAYERS.length - 1) {
-    btnC.style.display = 'inline-block';
-  }
-  updateAnteriorBtn(index);
+  document.getElementById('btnAnteriorWrap').style.display = 'flex';
+  document.getElementById('btnContinuar').style.display = nextToReveal < PLAYERS.length - 1 ? 'inline-block' : 'none';
 }
 
 function continuar() {
-  // Hide continuar button, resume from where we left off
   document.getElementById('btnContinuar').style.display = 'none';
-  if (nextToReveal >= 0 && nextToReveal < PLAYERS.length) {
-    showPlayer(nextToReveal);
-  }
+  showPlayer(nextToReveal);
 }
 
 function nextPlayer() { showPlayer((currentIndex + 1) % PLAYERS.length); }
 function prevPlayer() { showPlayer((currentIndex - 1 + PLAYERS.length) % PLAYERS.length); }
 
-function updateAnteriorBtn(index) {
-  var wrap = document.getElementById('btnAnteriorWrap');
-  wrap.style.display = (!allRevealed && lastRevealedIndex >= 0) ? 'flex' : 'none';
-}
-
-window.addEventListener('load', function(){ showPlayer(0); });
-
+window.addEventListener('load', function() { showPlayer(0); });
 </script>
 </body>
 </html>
