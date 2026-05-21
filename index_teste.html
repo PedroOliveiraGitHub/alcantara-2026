@@ -341,7 +341,7 @@ IMAGES["o_marco_silva"] = "o_marco_silva.png";
 IMAGES["o_tania"] = "o_tania.png";
 IMAGES["s_tania"] = "s_tania.png";
 
-var INTERVAL_MS = 30 * 1000;
+var INTERVAL_MS = 2 * 60 * 1000;
 var currentIndex = 0;
 var allRevealed = false;
 var autoTimer = null;
@@ -549,7 +549,24 @@ function continuar() {
 function nextPlayer() { showPlayer((currentIndex + 1) % PLAYERS.length); }
 function prevPlayer() { showPlayer((currentIndex - 1 + PLAYERS.length) % PLAYERS.length); }
 
-window.addEventListener('load', function() { showPlayer(0); });
+window.addEventListener('load', function() {
+  // Debug: show what's happening
+  var dbg = document.createElement('div');
+  dbg.id = 'debug';
+  dbg.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.8);color:lime;font-size:11px;padding:4px 8px;font-family:monospace;z-index:9999;';
+  document.body.appendChild(dbg);
+  function log(msg) { dbg.textContent = msg; console.log(msg); }
+
+  log('Starting showPlayer(0)...');
+  try {
+    var p = PLAYERS[0];
+    log('Player 0: ' + p.nome + ' key=' + p.key + ' img=' + IMAGES[p.key]);
+    showPlayer(0);
+    log('showPlayer called OK');
+  } catch(e) {
+    log('ERROR: ' + e.message);
+  }
+});
 </script>
 </body>
 </html>
