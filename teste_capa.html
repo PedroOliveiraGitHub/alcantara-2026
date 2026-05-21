@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teste Capa</title>
+<style>
+body { background:#000; margin:0; padding:20px; }
+img { width:100%; display:block; border:3px solid red; }
+#msg { color:lime; font-size:20px; padding:10px; }
+</style>
+</head>
+<body>
+<div id="msg">A carregar...</div>
+<img id="capa" src="capa_jardim.png" 
+  onload="document.getElementById('msg').textContent='CAPA CARREGOU OK!'"
+  onerror="document.getElementById('msg').textContent='ERRO: capa_jardim.png nao encontrado!'">
+</body>
+</html>
