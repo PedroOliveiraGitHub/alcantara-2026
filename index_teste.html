@@ -206,8 +206,9 @@ html, body {
     </div>
   </div>
 
-  <div class="btn-anterior-wrap" id="btnAnteriorWrap" style="display:none;margin-top:16px;">
+  <div class="btn-anterior-wrap" id="btnAnteriorWrap" style="display:none;margin-top:16px;gap:12px;justify-content:center;">
     <button class="btn-nav" onclick="verAnterior()">◀ VER ANTERIOR</button>
+    <button class="btn-nav" id="btnContinuar" style="display:none;" onclick="continuar()">CONTINUAR ▶</button>
   </div>
   <div class="nav-dots" id="navDots"></div>
   <div class="completed-banner" id="completedBanner">🏆 TODOS OS CROMOS REVELADOS · AMIZADE É O NOSSO MUNDIAL 🏆</div>
@@ -490,6 +491,7 @@ function buildDots() {
 
 function showPlayer(index) {
   currentIndex = index;
+  nextToReveal = index;
   var p = PLAYERS[index];
   clearTimeout(autoTimer);
   clearTimeout(typingTimeout);
@@ -590,6 +592,7 @@ function showPlayer(index) {
   }
   type();
   scheduleNext();
+  document.getElementById('btnContinuar').style.display = 'none';
   updateAnteriorBtn(index);
 }
 
@@ -660,8 +663,20 @@ function showRevealed(index) {
   document.getElementById('revealText').textContent = p.texto || '';
   document.getElementById('cursor').style.display = 'none';
 
-  // Update anterior button visibility
+  // Show continuar button if there are more cromos to reveal
+  var btnC = document.getElementById('btnContinuar');
+  if (nextToReveal < PLAYERS.length - 1) {
+    btnC.style.display = 'inline-block';
+  }
   updateAnteriorBtn(index);
+}
+
+function continuar() {
+  // Hide continuar button, resume from where we left off
+  document.getElementById('btnContinuar').style.display = 'none';
+  if (nextToReveal >= 0 && nextToReveal < PLAYERS.length) {
+    showPlayer(nextToReveal);
+  }
 }
 
 function nextPlayer() { showPlayer((currentIndex + 1) % PLAYERS.length); }
