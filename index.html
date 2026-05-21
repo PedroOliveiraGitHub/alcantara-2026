@@ -1,3 +1,4 @@
+<!-- v5 -->
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -93,32 +94,32 @@ html, body {
 }
 
 .card-wrap {
-  width:100%; border-radius:12px; overflow:hidden;
+  width:100%; border-radius:12px;
   box-shadow:0 20px 50px rgba(0,0,0,0.8);
   position:relative;
 }
-.card-wrap img {
-  width:100%; display:block;
-}
 
-/* Original começa invisível, JS controla opacity */
+/* Original — JS controla opacity e transform */
 #imgOriginal {
+  width:100%; display:block;
+  border-radius:12px;
   opacity:0;
   transform:scale(0.93) translateY(18px);
-  display:block;
 }
 
-/* Especial começa escondido por cima do original */
+/* Especial — sobreposto ao original via absolute */
 #imgEspecial {
   position:absolute;
-  top:0; left:0; width:100%; height:100%;
+  top:0; left:0;
+  width:100%; height:100%;
   object-fit:cover;
+  border-radius:12px;
   opacity:0;
-  display:block;
+  pointer-events:none;
 }
 #imgEspecial.visible {
   opacity:1;
-  transition:opacity 0.8s ease;
+  transition:opacity 1s ease;
 }
 
 .especial-label {
@@ -545,6 +546,7 @@ function showPlayer(index) {
   imgOrig.style.transform = 'scale(0.93) translateY(18px)';
   imgEsp.classList.remove('visible');
   imgEsp.style.opacity = '0';
+  imgEsp.style.transition = 'none';
   especialLabel.textContent = '';
   especialLabel.classList.remove('visible');
 
@@ -582,7 +584,12 @@ function showPlayer(index) {
         flash(true);
         setTimeout(function() {
           if (currentIndex !== index) return;
+          imgEsp.style.opacity = '0';
+          imgEsp.style.transition = 'opacity 1s ease';
           imgEsp.classList.add('visible');
+          // Force reflow then set opacity
+          imgEsp.getBoundingClientRect();
+          imgEsp.style.opacity = '1';
           especialLabel.textContent = '✦ CROMO ESPECIAL ✦';
           especialLabel.classList.add('visible');
         }, 400);
