@@ -492,7 +492,7 @@ function showPlayer(index) {
   clearTimeout(typingTimeout);
   clearInterval(progressTimer);
   buildDots();
-  document.getElementById('progressLabel').textContent = p.nome;
+  document.getElementById('progressLabel').textContent = 'CROMO ' + String(num).padStart(2,'0') + ' DE ' + total;
 
   var capaWrap = document.getElementById('capaWrap');
   var cromoWrap = document.getElementById('cromoWrap');
@@ -502,6 +502,7 @@ function showPlayer(index) {
     cromoWrap.classList.remove('active');
     document.getElementById('capaImg').src = IMAGES[p.key] || '';
     document.getElementById('capaText').textContent = p.texto || '';
+    document.getElementById('progressLabel').textContent = '';
     flash(false);
     scheduleNext();
     return;
