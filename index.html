@@ -190,9 +190,7 @@ html, body {
   <div id="cromoWrap">
     <div class="cromo-header">
       <div class="counter-badge" id="counterBadge"></div>
-      <div class="raridade-line" id="raridadeLine"></div>
-      <div class="player-name" id="playerName"></div>
-      <div class="alcunha" id="alcunha"></div>
+
     </div>
 
     <div class="two-col">
@@ -516,11 +514,8 @@ function showPlayer(index) {
   var total = PLAYERS.filter(function(x){ return x.tipo !== 'capa'; }).length;
   var num = PLAYERS.slice(0, index + 1).filter(function(x){ return x.tipo !== 'capa'; }).length;
   document.getElementById('counterBadge').textContent = 'CROMO ' + String(num).padStart(2,'0') + ' DE ' + total;
-  var raridadeEl = document.getElementById('raridadeLine');
-  raridadeEl.textContent = (p.raridade_stars||'') + ' RARIDADE: ' + p.raridade + ' ' + (p.raridade_stars||'');
-  raridadeEl.className = 'raridade-line ' + (p.raridade === 'LENDÁRIA' ? 'raridade-lendaria' : 'raridade-epica');
-  document.getElementById('playerName').textContent = p.nome;
-  document.getElementById('alcunha').textContent = p.alcunha ? '✦ ' + p.alcunha + ' ✦' : '';
+
+
 
   // Reset image
   var imgCromo = document.getElementById('imgCromo');
