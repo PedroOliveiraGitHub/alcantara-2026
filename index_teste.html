@@ -35,10 +35,6 @@ body::before {
 .progress-bar { width:100%; height:2px; background:rgba(255,215,0,0.1); border-radius:2px; }
 .progress-fill { height:100%; background:linear-gradient(90deg,#B8860B,#FFD700); border-radius:2px; width:0%; transition:width 0.5s linear; }
 .stage { width:100%; max-width:1000px; margin:0 auto; padding:20px 24px 60px; min-height:80vh; display:flex; flex-direction:column; align-items:center; }
-#capaWrap { display:none !important; width:100%; max-width:800px; border-radius:16px; overflow:hidden; box-shadow:0 30px 80px rgba(0,0,0,0.9),0 0 60px rgba(255,215,0,0.1); }
-#capaWrap.active { display:block; animation:fadeIn 0.8s ease; }
-#capaImg { width:100%; display:block; }
-.capa-text { text-align:center; padding:16px; font-family:Georgia,serif; font-size:15px; color:rgba(255,215,0,0.7); letter-spacing:2px; font-style:italic; }
 #cromoWrap { display:none; width:100%; }
 #cromoWrap.active { display:block; animation:fadeIn 0.5s ease; }
 .cromo-header { text-align:center; margin-bottom:20px; }
@@ -84,10 +80,6 @@ body::before {
   <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
 </div>
 <div class="stage">
-  <div id="capaWrap">
-    <img id="capaImg" src="" alt="">
-    <div class="capa-text" id="capaText"></div>
-  </div>
   <div id="cromoWrap">
     <div class="cromo-header">
       <div class="counter-badge" id="counterBadge"></div>
@@ -197,15 +189,9 @@ function showPlayer(index) {
   document.getElementById('btnAnteriorWrap').style.display = 'none';
   document.getElementById('btnContinuar').style.display = 'none';
 
-  var capaWrap = document.getElementById('capaWrap');
   var cromoWrap = document.getElementById('cromoWrap');
 
   if (p.tipo === 'capa') {
-    capaWrap.classList.add('active');
-    cromoWrap.classList.remove('active');
-    document.getElementById('capaImg').src = IMAGES[p.key] || '';
-    document.getElementById('capaText').textContent = p.key === 'contracapa' ? (p.texto || '') : '';
-    flash(false);
     if (index >= PLAYERS.length - 1) {
       allRevealed = true;
       buildDots();
@@ -218,7 +204,6 @@ function showPlayer(index) {
     return;
   }
 
-  capaWrap.classList.remove('active');
   cromoWrap.classList.add('active');
 
   var total = 0;
@@ -336,7 +321,6 @@ function showRevealed(index) {
   var p = PLAYERS[index];
   currentIndex = index;
   buildDots();
-  document.getElementById('capaWrap').classList.remove('active');
   document.getElementById('cromoWrap').classList.add('active');
   var total = 0; var num = 0;
   for (var i = 0; i < PLAYERS.length; i++) {
