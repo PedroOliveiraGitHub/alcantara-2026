@@ -553,7 +553,13 @@ function showPlayer(index) {
   if (p.tipo === 'capa') {
     capaWrap.classList.add('active');
     cromoWrap.classList.remove('active');
-    document.getElementById('capaImg').src = IMAGES[p.key] || '';
+    var capaImg = document.getElementById('capaImg');
+    capaImg.onerror = function() {
+      capaImg.style.cssText = 'width:100%;height:300px;background:#FFD700;display:flex;align-items:center;justify-content:center;';
+      capaImg.alt = 'ERRO: ' + IMAGES[p.key] + ' nao carregou';
+      console.error('Capa failed:', IMAGES[p.key]);
+    };
+    capaImg.src = IMAGES[p.key] || '';
     document.getElementById('capaText').textContent = p.key === 'contracapa' ? (p.texto || '') : '';
     flash(false);
     if (index >= PLAYERS.length - 1) {
@@ -717,7 +723,16 @@ function continuar() {
 function nextPlayer() { showPlayer((currentIndex + 1) % PLAYERS.length); }
 function prevPlayer() { showPlayer((currentIndex - 1 + PLAYERS.length) % PLAYERS.length); }
 
-window.addEventListener('load', function() { showPlayer(0); });
+window.addEventListener('load', function() {
+  // Force capaWrap visible immediately for debug
+  var cw = document.getElementById('capaWrap');
+  var ci = document.getElementById('capaImg');
+  cw.style.display = 'block';
+  ci.src = 'capa_jardim.png';
+  ci.onload = function() { console.log('capa loaded OK'); };
+  ci.onerror = function() { console.log('capa FAILED'); cw.style.background='red'; };
+  setTimeout(function() { showPlayer(0); }, 100);
+});
 </script>
 </body>
 </html>
