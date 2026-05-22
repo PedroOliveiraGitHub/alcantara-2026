@@ -55,6 +55,9 @@ body::before { content:''; position:fixed; inset:0; background:rgba(0,0,0,0.78);
 </style>
 </head>
 <body>
+<div id="splash" style="position:fixed;inset:0;z-index:9000;background:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="startShow()">
+  <img src="capa_jardim.png" style="width:100%;height:100%;object-fit:cover;display:block;">
+</div>
 <div class="header">
   <div class="header-sub">&#9733; EDIÇÃO ESPECIAL &#9733;</div>
   <div class="header-title">SELEÇÃO DO JARDIM</div>
@@ -134,7 +137,7 @@ IMAGES["o_marco_silva"] = "o_marco_silva.png";
 IMAGES["o_tania"] = "o_tania.png";
 IMAGES["s_tania"] = "s_tania.png";
 
-var INTERVAL_MS = 2 * 60 * 1000;
+var INTERVAL_MS = 30 * 1000;
 var currentIndex = 0;
 var allRevealed = false;
 var autoTimer = null;
@@ -327,7 +330,23 @@ function continuar() {
 function nextPlayer() { showPlayer((currentIndex + 1) % PLAYERS.length); }
 function prevPlayer() { showPlayer((currentIndex - 1 + PLAYERS.length) % PLAYERS.length); }
 
-window.addEventListener('load', function() { showPlayer(0); });
+function startShow() {
+  var splash = document.getElementById('splash');
+  splash.style.transition = 'opacity 0.8s ease';
+  splash.style.opacity = '0';
+  setTimeout(function() {
+    splash.style.display = 'none';
+    showPlayer(0);
+  }, 800);
+}
+
+window.addEventListener('load', function() {
+  // Auto-start after 4 seconds or on click
+  setTimeout(function() {
+    var splash = document.getElementById('splash');
+    if (splash && splash.style.display !== 'none') startShow();
+  }, 4000);
+});
 
 </script>
 </body>
