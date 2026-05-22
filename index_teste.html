@@ -81,6 +81,356 @@ body::before { content:''; position:fixed; inset:0; background:rgba(0,0,0,0.78);
     </div>
   </div>
   <div class="btn-anterior-wrap" id="btnAnteriorWrap">
+    <button class="btn-nav" id="btnAnteriorD" onclick="navDurante(-1)">&#9664; ANTERIOR</button>
+    <button class="btn-nav" id="btnContinuar" style="display:none" onclick="continuar()">&#9654; CONTINUAR</button>
+    <button class="btn-nav" id="btnProximoD" style="display:none" onclick="navDurante(1)">PRÓXIMO &#9654;</button>
+  </div>
+  <div class="nav-dots" id="navDots"></div>
+  <div class="completed-banner" id="completedBanner">&#127942; TODOS OS CROMOS REVELADOS &middot; AMIZADE É O NOSSO MUNDIAL &#127942;</div>
+  <div class="nav-buttons" id="navButtons">
+    <button class="btn-nav" onclick="prevPlayer()">&#9664; ANTERIOR</button>
+    <button class="btn-nav" onclick="nextPlayer()">PRÓXIMO &#9654;</button>
+  </div>
+</div>
+<div class="flash-overlay" id="flashOverlay"></div>
+<script>
+const PLAYERS = [{"num":0,"nome":"A SELEÇÃO DO JARDIM","raridade":"CONTRACAPA","raridade_stars":"","key":"capa_jardim","tipo":"capa","texto":"Somos Jardim. Amizade é o nosso Mundial. 2026."},{"num":1,"nome":"ANA RIBEIRO","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_ana_ribeiro","tipo":"cromo","texto":"Desceu do Miratejo como quem vem de um Olimpo da Margem Sul e instalou-se no bairro com uma coisa muito clara: olho clínico para o que é bonito — e paciência zero para o que não é.  De dia doma cores e tipografias. De noite, a zumba não sabe o que a espera.  Não lhe mostres um design mau. Ela sorri. Mas sofre por dentro.  Dificuldade de coleção: alta. Não aparece em qualquer bairro.","key_original":"o_ana_ribeiro"},{"num":2,"nome":"CARLA AGOAS","raridade":"LENDÁRIA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_carla_agoas","tipo":"cromo","texto":"Cabelos em caracóis que parecem ter vida própria — e provavelmente têm. Tem o dom raro de estar sempre a par de tudo o que se passa à sua volta. Tudo.  Na cozinha, o problema não é a qualidade. É a quantidade. Vais jantar? Sais com marmita para a semana.  Segue o Sporting com uma devoção que ultrapassa fronteiras — literalmente. Já foi vê-los jogar a terras onde os vikings usavam o futebol como pretexto para invadir, e ela estava lá na bancada, cachecol ao vento.  Em casa vive um ser misterioso chamado Chernobyl. É um cão. Dizem que é inofensivo. O nome sugere outra coisa.  Dificuldade de coleção: média. Mas se a encontrares, prepara-te para ficar pelo menos duas horas.","key_original":"o_carla_agoas"},{"num":3,"nome":"ISABEL BAIRRÃO","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_isabel_bairao","tipo":"cromo","texto":"Vem do Tramagal — terra pequena, personalidade grande. Defende causas com uma garra que só se explica por anos a garantir que ninguém dorme mal… pelo menos não por culpa do colchão.  Cumprimenta com um beijinho. Um. Não insistas no segundo.  No campo, torce pelo Atlético da Tapadinha como se estivesse em Wembley. A competição corre-lhe nas veias — numa discussão, num jogo de tabuleiro, numa lista de preços num restaurante.  Falando nisso: não a deixes pegar na conta. Vai estudá-la com a atenção de quem lê uma cláusula contratual.  De noite, o karaoke é dela. Fado, pimba, clássicos — entoa tudo com uma convicção jurídica inabalável. Sem microfone à vista, improvisa.  Dificuldade de coleção: alta. Vem com termos e condições.","key_original":"o_isabel_bairao"},{"num":4,"nome":"JOANA FRADE","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_joana_frade","tipo":"cromo","texto":"Caracóis perfeitos. Não toques. Não perguntes. Segue em frente.  Sabe tudo sobre música — e não é figura de estilo. Tem programa de rádio, não perde um concerto seja em que ponto do mapa estiver, e olha para quem confunde um artista com outro com uma pena silenciosa e profunda.  Tem um título não oficial mas universalmente reconhecido: Barbie Jolas. Glamour num copo, sempre.  Organiza os planos para o grupo com uma eficiência que envergonharia qualquer secretária-geral de sindicato. A agenda já está feita. O local já está reservado. Tu só tens de aparecer — e aparecer a horas.  Feminista, mandona e com uma visão muito clara de como as coisas devem funcionar. Spoiler: à maneira dela. E normalmente ela tem razão.  Dificuldade de coleção: baixa — ela já organizou o encontro. Alta — nos seus termos.","key_original":"o_joana_frade"},{"num":5,"nome":"JOÃO SANTOS","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_joao_santos","tipo":"cromo","texto":"Alto, de bairro — o Alto de Santo Amaro, para ser exato — e com uma energia de mar que não abandona mesmo em terra firme. Apelidado de Fofinho pelo grupo. O apelido diz tudo. E não diz nada.  Conhece as melhores ondas. O problema é que quando lá chegas, as ondas já foram. Ele encolhe os ombros. O mar é assim.  A uma jola nunca disse que não. É um princípio de vida, quase uma filosofia.  Tem gráfica e imprime tudo para toda a gente — convites, cartazes, flyers, aquela coisa que precisas para amanhã de manhã. É o recurso oficial do grupo.  Vai à caça submarina. É pescador. Fala de peixes com conhecimento e paixão. Nenhum peixe foi ainda avistado em sua posse. A investigação continua.  Dificuldade de coleção: média. Está sempre algures entre o mar e a gráfica — e nenhum dos dois é perto.","key_original":"o_joao_santos"},{"num":6,"nome":"LILIANA MARTINS","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐★","key":"s_liliana_martins","tipo":"cromo","texto":"Aparece sem avisar — literalmente. Está sempre algures entre um fuso horário e outro, mas quando aterra, fá-lo com cabelos longos impecáveis e um bronze que envergonha quem passou o verão na praia sem sair do lugar.  Falando em praia: é o seu habitat natural. O mar reconhece-a.  Na cozinha, o seu domínio é a sopa — mas não qualquer sopa. Tem de ser biológica, consciente, alinhada com o universo. Uma sopa com propósito.  Nunca foi vista sem os seus Vans calçados. É uma constante num mundo incerto. Os voos mudam, os fusos mudam — os Vans ficam.  A sesta não é um luxo. É uma necessidade clínica e um pilar da sua identidade. Quando acorda, tem muito para contar — e conta mesmo, com entusiasmo, com detalhe, e preferencialmente a centímetros do teu ouvido. A distância de segurança não se aplica.  Dificuldade de coleção: muito alta. Está sempre a voar.","key_original":"o_liliana_martins"},{"num":7,"nome":"LUIS JUSTINO","raridade":"LENDÁRIA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_luis_justino","tipo":"cromo","texto":"Conhecido no bairro como o Bombeiro — não por apagar fogos, mas porque onde aparece, a energia inflama tudo à volta. Sorriso permanente, disposição a toda a hora, e uma frase de marca registada: \"Está tudo na boa.\"  Controla o trânsito da Carris, tatua, cozinha a nível profissional, carpinteia, faz bodyboard, pesca à cana e mergulha para caça submarina. Não é um homem. É um canivete suíço com moto.  Ah, a moto. Corta o trânsito de Lisboa com a elegância de quem conhece cada atalho — porque provavelmente foi ele que os construiu.  Aprecia um bom vinho com a seriedade de quem merece cada copo depois de tudo o que faz num dia normal.  Diz que pesca lavagantes. Ninguém os viu. O que existe, e esse é real e glorioso, é um arroz que desafia qualquer explicação racional. Come-se e fica-se em silêncio.  Dificuldade de coleção: baixa — está sempre bem disposto. Alta — nunca está parado o tempo suficiente para o apanhar.","key_original":"o_luis_justino"},{"num":8,"nome":"SOFIA AFONSO","raridade":"LENDÁRIA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_sofia_afonso","tipo":"cromo","texto":"Altura impactante — com ajuda. Sem ela, é necessário procurar um pouco mais abaixo, mas a presença é tão grande que o olhar vai sempre na direção certa.  Tem uma voz de fado como há poucas. O tipo de voz que para uma sala sem avisar.  Quem a quiser encontrar, não precisa de GPS — está no Egas, na rua, ao sol, de onde supervisiona o mundo com uma autoridade tranquila e um café provavelmente na mão.  Caliente nas palavras como há poucos. Diz asneiras com uma elegância que deixa as pessoas a pensar se acabaram de ser insultadas ou de assistir a um momento cultural. Provavelmente os dois.  Preferia ter um dos ofícios mais antigos do mundo a ser sócia do Sporting, diz ela porque no fundo queria ser beta do 2 de Maio.  Tem uma tatuagem com uma data. A data essa errada. Ela sabe, mas como é pouco teimosa, existe a certeza que um dia irá mudar.  Projeta uma confiança que afugentaria o maior dos bandidos — o que é notável dado o seu tamanho avassalador. No fundo é como um caniche: ladra muito, com estilo, com dicção perfeita — mas não morde.  Dificuldade de coleção: nenhuma. Está no Egas. Sempre esteve.","key_original":"o_sofia_afonso"},{"num":11,"nome":"TIAGO MAIA","raridade":"LENDÁRIA","raridade_stars":"⭐⭐⭐⭐⭐⭐","key":"s_tiago_maia","tipo":"cromo","texto":"O nome já é um cromo. A pessoa é um espetáculo completo. Tem uma dificuldade clínica em não fazer um trocadilho — especialmente se for virado para a marotice. O timing é perfeito, a cara é de inocência total. Ninguém acredita. Anda com um estilo que Charlie Chaplin reconheceria como seu — e com a mesma graça que desarmava qualquer sala. Involuntário. Por isso resulta. Contabilista de mão cheia — gere as suas contas com uma precisão cirúrgica que contrasta olimpicamente com tudo o resto da sua existência. Faz bodyboard — uma vez por ano, condições perfeitas, astros alinhados e principalmente motivação suficiente para abandonar a cama, o que por si é raro. O caparro, esse, é lendário. Visto de lado apresenta uma lomba na zona abdominal que as câmaras municipais já deviam ter sinalizado. Abre minis com uma cerimónia e perícia que é uma arte. Faz a festa em qualquer lado, maneja drones e câmara com um estilo que não se aprende — e tem o privilégio raro de andar com estrelas da televisão portuguesa. Adora um beliscão e um beijo na boca sem aviso prévio. É a sua linguagem do amor. Dificuldade de coleção: zero. Ele já te deu um beijo na boca antes de te apresentares.","key_original":"o_tiago_maia"},{"num":12,"nome":"SÍLVIA PINTO","raridade":"LENDÁRIA","raridade_stars":"⭐⭐⭐⭐⭐⭐","key":"s_silvia_pinto","tipo":"cromo","texto":"Boss ou princesa — depende do dia, da hora e de fatores que só ela conhece. Entra em qualquer sítio com a convicção de quem chegou exactamente quando devia chegar. Os cumprimentos? Esses são geridos com uma discrição soberana. Hoje sim, hoje logo se vê.  É uma porreira das antigas — leal, presente, amiga do seu amigo com uma intensidade que inclui conversas longas, muito longas, longas o suficiente para testar a paciência do elemento do grupo que mais paciência tem. E testa. Regularmente.  Cozinhar não é com ela. Compras também não. Mas uma mesa desarranjada, um cabide fora do lugar ou duas cores que não combinam — isso não passa. O caos visual é pessoal.  Aprecia arte, adora teatro — especialmente para adormecer o elemento mais acelerado do grupo com uma eficácia que nenhuma farmácia consegue replicar.  No ski atinge velocidades que desafiam a física — pela positiva. A montanha tem tempo. Ela tem mais.  Uma cerveja bem gelada? Isso sim. Sempre.  Dificuldade de coleção: imprevisível. Pode estar em grande — ou hoje não é dia.","key_original":"o_silvia_pinto"},{"num":13,"nome":"SALOMÉ PASCOAL","raridade":"LENDÁRIA","raridade_stars":"⭐⭐⭐⭐⭐⭐","key":"s_salome_pascoal","tipo":"cromo","texto":"Margem Sul em força — vem da Aroeira, ali pertinho da praia, o que explica os quilómetros acumulados a passear de um lado para o outro enquanto espera pacientemente que alguém deste grupo saia finalmente da água. Ela espera. Ela sempre espera.  Adora uma festa com uma energia que enche qualquer sala. Tem uma voz com um alcance... especial. É um dom subtil.  Tem um cão. Em teoria é fofo. Na prática parece uma bola de pelo com uma missão muito clara: intimidar tudo e todos que se aproximem a menos de dois metros. Dizem que é um amor por dentro. Ninguém ainda confirmou em primeira mão.  Dificuldade de coleção: baixa — está na praia, a andar, à espera. Muito à espera.","key_original":"o_salome_pascoal"},{"num":14,"nome":"RICARDO MIGUEL","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_ricardo_miguel","tipo":"cromo","texto":"Anda pelas ruas a caçar mauzões com uma farda que pelo menos um elemento do grupo aprecia com uma admiração que não é estritamente profissional.  Joga futebol aos sábados com uma dedicação total e um corpo que conta a história — chega sempre com uma marca nova que levanta questões sobre o que exatamente se passa naquele campo. A perícia, essa, está em desenvolvimento contínuo.  Quase faz surf. Quase faz bodyboard. Quase faz caça submarina. O \"quase\" é recorrente, mas o medo é zero — e isso, convenhamos, já é mais do que a maioria.  Nos trabalhos manuais aplica-se com afinco. As ferramentas agradecem. Os dedos, nem sempre.  Adora a paz da terra — literalmente. Campo, silêncio, natureza. Um homem de contrastes.  À noite, quando os copos aparecem, encontra a sua posição natural: encostado à parede, inabalável, sereno, presente. Não dança, não circula, não migra. É uma força da natureza estática. Uma rocha. Um pilar. A parede agradece o apoio.  Dificuldade de coleção: baixa. Já sabes onde ele está — à parede, à direita, copo na mão.","key_original":"o_ricardo_miguel"},{"num":15,"nome":"RICARDO AGOAS","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_ricardo_agoas","tipo":"cromo","texto":"Caladinho. Mas do género que observa tudo, processa tudo e quando fala, já chegou a uma conclusão que os outros ainda não tiveram. O bom malandro nunca estrilha — e este é muito bom.  Tem uma cabeleira farta e reluzente que é, honestamente, uma das mais impressionantes do grupo. No sentido em que impressiona pela ausência. Brilha, isso sim — literalmente.  Foi futebolista. Viveu em Porto Santo numa época que permanece envoluta em mistério e que ele não esclarece com grande entusiasmo. Viveu anos em Angola, terra que carrega no coração e visita sempre que pode — para matar saudades e recarregar uma parte de si que Lisboa não consegue preencher.  Quando a barriga ameaça ganhar terreno, o crossfit entra em cena sem piedade. É uma guerra pessoal. Recorrente, mas com resultados.  Dificuldade de coleção: alta. Está presente, mas nos seus próprios termos — e esses termos são poucos e bons.","key_original":"o_ricardo_agoas"},{"num":16,"nome":"MARIA JOÃO","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_maria_joao","tipo":"cromo","texto":"Vem de Tomar — cidade bonita, história rica, e claramente água boa para criar mentes afiadas. Especialista em química, com especial carinho pela orgânica. O tipo de pessoa que olha para uma substância e sabe exatamente o que é. Especialmente se for proibida.  Comanda o laboratório da polícia de elite — só chamada nos casos complicados, nos que envolvem coisas que não deviam existir. Chegou ela, está resolvido.  A língua é afiada e o timing é cirúrgico. Quando fala, acerta. Sempre.  Tem uma relação especial com fardas — a da GNR em particular provoca-lhe uma admiração que não esconde muito bem.  Adora teatro, adora actuar, encarna personagens com uma entrega total. Quais personagens exactamente? Boa pergunta. Ela não conta tudo.  A pontualidade é uma área em desenvolvimento permanente — chega sempre atrasada, mas com uma regularidade tão consistente que a essa hora já se pode chamar a hora dela.  A Madeira é a sua segunda casa. O arquipélago reconhece-a, ela retribui sempre que pode.  Dificuldade de coleção: média. Aparece — mas quando ela quiser.","key_original":"o_maria_joao"},{"num":17,"nome":"MARCO SILVA","raridade":"LENDÁRIA","raridade_stars":"⭐⭐⭐⭐⭐⭐","key":"s_marco_silva","tipo":"cromo","texto":"Tem uma alcunha aquática que não podia assentar melhor em alguém que evita a água com tamanha consistência. Na praia, o desporto preferido é a posição horizontal com execução tecnicamente irrepreensível.  No mercado da Ajuda ou em qualquer rua do bairro, uma ida rápida às compras transforma-se numa expedição diplomática de duas horas. Para com toda a gente. Conhece toda a gente. Conta tudo a toda a gente — é um cofre, mas sem cadeado.  Combina cores de roupa com um talento que não se ensina. É claramente um dom que veio para compensar outras áreas.  Joga futebol todos os sábados de manhã com uma pontualidade religiosa e uma dedicação inabalável. O resultado do jogo? Esse permanece um mistério por resolver há anos.  Futuro presidente da Junta da Ajuda. Não é previsão. É inevitabilidade. O bairro já sabe.  Dificuldade de coleção: nenhuma. Ele já te encontrou a ti, parou, contou tudo — e ainda te ajudou a combinar o outfit.","key_original":"o_marco_silva"},{"num":18,"nome":"TÂNIA","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐⭐","key_original":"o_tania","key":"s_tania","tipo":"cromo","texto":"Nascida e criada em Alcântara — bairro de raiz, orgulho de terra. Elegante, calma, equilibrada. Um verniz impecável que se mantém intacto até ao momento em que o copo de vinho tinto aparece. A partir daí, a festa tem nome e endereço.  Líder indiscutível das danças de grupo nos Santos Populares — ao som do pimba mais pimba que houver, com uma entrega total e sem qualquer pedido de desculpas. Como deve ser.  No dia a dia está na dela, pacífica, serena. Mas quem lhe pisa os calos descobre rapidamente que o verniz tem limites bem definidos. E que esses limites têm consequências.  Adora praia e adora que o seu homem traga peixe fresco. O problema é exactamente esse — que o traga. A teoria é boa, a prática continua em desenvolvimento.  É do Benfica — mas com uma elegância e uma classe que a distingue da pimenta que há no grupo.  Dificuldade de coleção: média. Está na dela — até ao segundo copo."},{"num":9,"nome":"PEDRO OLIVEIRA","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐★","key":"s_pedro_oliveira","tipo":"cromo","texto":"Homem de paciência infinita — para os amigos, para a vida, e para a sua pequenina, que é a sortuda de ter alguém assim ao lado. Faz muito, parece que não faz nada, e quando te apercebes já está feito. Programa com uma profundidade que só ele entende. E está bem assim.  No padel, o que lhe falta em perícia sobra-lhe em dedicação, presença e uma vontade inabalável de tentar outra vez. A bola vai onde quer. Ele vai atrás. É bonito à sua maneira.  Não lhe ofereças uma jola. Gin, sim — mas não qualquer um. Tem critérios, tem preferências, tem opinião. Em alternativa aceita água das pedras, desde que ninguém pergunte muito.  Adora desportos com vento. Vela, kite, surf — quanto mais ventoso, melhor. Parece saído diretamente de E Tudo o Vento Levou, mas em versão mais moderna e com melhor equipamento.  Dificuldade de coleção: alta. Está sempre algures onde o vento o levou.","key_original":"o_pedro_oliveira","alcunha":"AI MASTER"},{"num":10,"nome":"RICARDO RODRIGUES","raridade":"ÉPICA","raridade_stars":"⭐⭐⭐⭐⭐","key":"s_ricardo_rodrigues","tipo":"cromo","texto":"Baixo em altura, gigante em presença. Beto de Miratejo de origem, mas integrado no bairro ao ponto de já ser tratado simplesmente por \"Chamuças\".  Especialista em picar miolos e lançar discussões só para apreciar o caos à distância. Tem uma frase de assinatura que normalmente aparece segundos antes do desastre: \"Vai dar merda…\"  Vive entre o mar e o aeroporto. Faz bodyboard, já correu meio mundo e acumulou histórias suficientes para parecer que viveu três vidas diferentes — de Dakar até Helsínquia, passando sabe-se lá por onde mais.  Não perde uma jola. Nunca. Especialmente se for \"a ultimazinha\", expressão eternizada pelo seu camarada João e repetida religiosamente sempre que o grupo já devia claramente ir para casa… mas não vai.  Tem uma boa disposição absolutamente contagiante e um coração enorme. Está sempre pronto para ajudar, rir, alinhar num plano ou defender um amigo… excepto se fores benfiquista. Aí já não promete imparcialidade.  Dificuldade de coleção: média. Está sempre entre uma viagem, uma onda, uma jola e uma discussão que ele próprio começou.","key_original":"o_ricardo_rodrigues","alcunha":"COPYWRITER"},{"num":0,"nome":"A SELEÇÃO DE ALCÂNTARA","raridade":"CAPA","raridade_stars":"","key":"contracapa","tipo":"capa","texto":"A Seleção de Amigos de Alcântara. Amizade é o nosso Mundial. 2026."}];
+const IMAGES = {};
+IMAGES["capa_jardim"] = "capa_jardim.png";
+IMAGES["contracapa"] = "contracapa.jpg";
+IMAGES["s_ana_ribeiro"] = "s_ana_ribeiro.png";
+IMAGES["s_carla_agoas"] = "s_carla_agoas.png";
+IMAGES["s_isabel_bairao"] = "s_isabel_bairao.png";
+IMAGES["s_joana_frade"] = "s_joana_frade.png";
+IMAGES["s_joao_santos"] = "s_joao_santos.png";
+IMAGES["s_liliana_martins"] = "s_liliana_martins.png";
+IMAGES["s_luis_justino"] = "s_luis_justino.png";
+IMAGES["s_sofia_afonso"] = "s_sofia_afonso.png";
+IMAGES["s_pedro_oliveira"] = "s_pedro_oliveira.png";
+IMAGES["s_tiago_maia"] = "s_tiago_maia.png";
+IMAGES["s_silvia_pinto"] = "s_silvia_pinto.png";
+IMAGES["s_salome_pascoal"] = "s_salome_pascoal.png";
+IMAGES["s_ricardo_miguel"] = "s_ricardo_miguel.png";
+IMAGES["s_ricardo_agoas"] = "s_ricardo_agoas.png";
+IMAGES["s_maria_joao"] = "s_maria_joao.png";
+IMAGES["s_marco_silva"] = "s_marco_silva.png";
+IMAGES["s_ricardo_rodrigues"] = "s_ricardo_rodrigues.png";
+IMAGES["o_ana_ribeiro"] = "o_ana_ribeiro.png";
+IMAGES["o_carla_agoas"] = "o_carla_agoas.png";
+IMAGES["o_isabel_bairao"] = "o_isabel_bairao.png";
+IMAGES["o_joana_frade"] = "o_joana_frade.png";
+IMAGES["o_joao_santos"] = "o_joao_santos.png";
+IMAGES["o_liliana_martins"] = "o_liliana_martins.png";
+IMAGES["o_luis_justino"] = "o_luis_justino.png";
+IMAGES["o_sofia_afonso"] = "o_sofia_afonso.png";
+IMAGES["o_pedro_oliveira"] = "o_pedro_oliveira.png";
+IMAGES["o_ricardo_rodrigues"] = "o_ricardo_rodrigues.png";
+IMAGES["o_tiago_maia"] = "o_tiago_maia.png";
+IMAGES["o_silvia_pinto"] = "o_silvia_pinto.png";
+IMAGES["o_salome_pascoal"] = "o_salome_pascoal.png";
+IMAGES["o_ricardo_miguel"] = "o_ricardo_miguel.png";
+IMAGES["o_ricardo_agoas"] = "o_ricardo_agoas.png";
+IMAGES["o_maria_joao"] = "o_maria_joao.png";
+IMAGES["o_marco_silva"] = "o_marco_silva.png";
+IMAGES["o_tania"] = "o_tania.png";
+IMAGES["s_tania"] = "s_tania.png";
+
+var INTERVAL_MS = 30 * 1000;
+var currentIndex = 0;
+var allRevealed = false;
+var autoTimer = null;
+var typingTimeout = null;
+var progressTimer = null;
+var lastRevealedIndex = -1;
+var nextToReveal = 0;
+
+function flash(epic) {
+  var el = document.getElementById('flashOverlay');
+  el.className = 'flash-overlay ' + (epic ? 'flash-epic' : 'flash');
+  setTimeout(function() { el.className = 'flash-overlay'; }, epic ? 800 : 400);
+}
+
+function buildDots() {
+  var container = document.getElementById('navDots');
+  container.innerHTML = '';
+  for (var i = 0; i < PLAYERS.length; i++) {
+    if (PLAYERS[i].tipo === 'capa') continue;
+    var dot = document.createElement('div');
+    dot.className = 'dot' + (i === currentIndex ? ' active-dot' : '') + (i < currentIndex ? ' done' : '') + (allRevealed ? ' clickable' : '');
+    if (allRevealed) { (function(idx) { dot.onclick = function() { showPlayer(idx); }; })(i); }
+    container.appendChild(dot);
+  }
+}
+
+function showPlayer(index) {
+  currentIndex = index;
+  nextToReveal = index;
+  browseIndex = -1;
+  var p = PLAYERS[index];
+  clearTimeout(autoTimer);
+  clearTimeout(typingTimeout);
+  clearInterval(progressTimer);
+  buildDots();
+  document.getElementById('btnAnteriorWrap').style.display = 'none';
+  document.getElementById('btnContinuar').style.display = 'none';
+
+  if (p.tipo === 'capa') {
+    if (index >= PLAYERS.length - 1) {
+      allRevealed = true;
+      buildDots();
+      document.getElementById('completedBanner').classList.add('visible');
+      document.getElementById('navButtons').classList.add('visible');
+      document.getElementById('progressFill').style.width = '100%';
+    } else {
+      scheduleNext();
+    }
+    return;
+  }
+
+  var cromoWrap = document.getElementById('cromoWrap');
+  cromoWrap.classList.add('active');
+
+  var total = 0; var num = 0;
+  for (var i = 0; i < PLAYERS.length; i++) {
+    if (PLAYERS[i].tipo !== 'capa') { total++; if (i <= index) num++; }
+  }
+  document.getElementById('counterBadge').textContent = 'CROMO ' + String(num).padStart(2,'0') + ' DE ' + total;
+
+  var imgCromo = document.getElementById('imgCromo');
+  var especialLabel = document.getElementById('especialLabel');
+  imgCromo.style.transition = 'none';
+  imgCromo.style.opacity = '0';
+  imgCromo.style.transform = 'scale(0.93) translateY(18px)';
+  especialLabel.textContent = '';
+  especialLabel.classList.remove('visible');
+
+  var srcOrig = (p.key_original && IMAGES[p.key_original]) ? IMAGES[p.key_original] : '';
+  var srcEsp = (p.key && IMAGES[p.key] && p.key !== p.key_original) ? IMAGES[p.key] : '';
+  var playerIndex = index;
+
+  imgCromo.src = srcOrig || srcEsp;
+
+  var textEl = document.getElementById('revealText');
+  var cursor = document.getElementById('cursor');
+  textEl.textContent = '';
+  cursor.style.display = 'inline-block';
+
+  var text = p.texto || '';
+  var typeDuration = Math.min(INTERVAL_MS * 0.4, 50000);
+  var speed = Math.max(15, Math.floor(typeDuration / Math.max(text.length, 1)));
+  var i = 0;
+
+  function type() {
+    if (currentIndex !== playerIndex) return;
+    if (i < text.length) {
+      textEl.textContent += text[i++];
+      var progress = i / text.length;
+      imgCromo.style.opacity = String(progress.toFixed(3));
+      imgCromo.style.transform = 'scale(' + (0.93 + progress * 0.07).toFixed(3) + ') translateY(' + ((1 - progress) * 18).toFixed(1) + 'px)';
+      typingTimeout = setTimeout(type, speed);
+    } else {
+      cursor.style.display = 'none';
+      imgCromo.style.opacity = '1';
+      imgCromo.style.transform = 'scale(1) translateY(0)';
+      if (srcEsp) {
+        setTimeout(function() {
+          if (currentIndex !== playerIndex) return;
+          flash(true);
+          setTimeout(function() {
+            if (currentIndex !== playerIndex) return;
+            imgCromo.style.transition = 'opacity 0.5s ease';
+            imgCromo.style.opacity = '0';
+            setTimeout(function() {
+              if (currentIndex !== playerIndex) return;
+              imgCromo.src = srcEsp;
+              imgCromo.style.opacity = '1';
+              especialLabel.textContent = '✶ CROMO ESPECIAL ✶';
+              especialLabel.classList.add('visible');
+              lastRevealedIndex = playerIndex;
+              browseIndex = playerIndex;
+              if (!allRevealed) {
+                document.getElementById('btnAnteriorWrap').style.display = 'flex';
+                document.getElementById('btnContinuar').style.display = 'none';
+                document.getElementById('btnProximoD').style.display = 'none';
+                document.getElementById('btnAnteriorD').style.display = lastRevealedIndex > 1 ? 'inline-block' : 'none';
+              }
+            }, 500);
+          }, 300);
+        }, 800);
+      } else {
+        lastRevealedIndex = playerIndex;
+        browseIndex = playerIndex;
+        if (!allRevealed) {
+          document.getElementById('btnAnteriorWrap').style.display = 'flex';
+          document.getElementById('btnContinuar').style.display = 'none';
+          document.getElementById('btnProximoD').style.display = 'none';
+          document.getElementById('btnAnteriorD').style.display = lastRevealedIndex > 1 ? 'inline-block' : 'none';
+        }
+      }
+    }
+  }
+  type();
+  scheduleNext();
+}
+
+function scheduleNext() {
+  clearTimeout(autoTimer);
+  clearInterval(progressTimer);
+  if (allRevealed) return;
+  var nextIdx = currentIndex + 1;
+  if (nextIdx >= PLAYERS.length) {
+    allRevealed = true;
+    buildDots();
+    document.getElementById('completedBanner').classList.add('visible');
+    document.getElementById('navButtons').classList.add('visible');
+    document.getElementById('progressFill').style.width = '100%';
+    return;
+  }
+  var start = Date.now();
+  progressTimer = setInterval(function() {
+    var pct = Math.min(100, ((Date.now() - start) / INTERVAL_MS) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+  }, 500);
+  autoTimer = setTimeout(function() {
+    clearInterval(progressTimer);
+    document.getElementById('progressFill').style.width = '0%';
+    showPlayer(nextIdx);
+  }, INTERVAL_MS);
+}
+
+// browseIndex = index being browsed during reveal (-1 = not browsing)
+var browseIndex = -1;
+
+function navDurante(dir) {
+  clearTimeout(autoTimer);
+  clearInterval(progressTimer);
+  document.getElementById('progressFill').style.width = '0%';
+
+  // Build list of revealed cromos (those with index <= lastRevealedIndex, not capa)
+  var revealed = [];
+  for (var i = 0; i < PLAYERS.length; i++) {
+    if (PLAYERS[i].tipo !== 'capa' && i <= lastRevealedIndex) revealed.push(i);
+  }
+  if (revealed.length === 0) return;
+
+  // Find current browse position
+  if (browseIndex < 0) browseIndex = lastRevealedIndex;
+  var pos = revealed.indexOf(browseIndex);
+  pos = Math.max(0, Math.min(revealed.length - 1, pos + dir));
+  browseIndex = revealed[pos];
+
+  showRevealed(browseIndex);
+
+  // Show/hide prev/next/continuar buttons
+  document.getElementById('btnAnteriorWrap').style.display = 'flex';
+  document.getElementById('btnAnteriorD').style.display = pos > 0 ? 'inline-block' : 'none';
+  document.getElementById('btnProximoD').style.display = pos < revealed.length - 1 ? 'inline-block' : 'none';
+  document.getElementById('btnContinuar').style.display = 'inline-block';
+}
+
+function showRevealed(index) {
+  var p = PLAYERS[index];
+  currentIndex = index;
+  buildDots();
+  document.getElementById('cromoWrap').classList.add('active');
+  var total = 0; var num = 0;
+  for (var i = 0; i < PLAYERS.length; i++) {
+    if (PLAYERS[i].tipo !== 'capa') { total++; if (i <= index) num++; }
+  }
+  document.getElementById('counterBadge').textContent = 'CROMO ' + String(num).padStart(2,'0') + ' DE ' + total;
+  var imgCromo = document.getElementById('imgCromo');
+  var especialLabel = document.getElementById('especialLabel');
+  var srcEsp = (p.key && IMAGES[p.key] && p.key !== p.key_original) ? IMAGES[p.key] : '';
+  var srcOrig = (p.key_original && IMAGES[p.key_original]) ? IMAGES[p.key_original] : '';
+  var src = srcEsp || srcOrig;
+  imgCromo.style.transition = 'none';
+  imgCromo.style.opacity = '0';
+  imgCromo.src = src;
+  imgCromo.onload = function() { imgCromo.style.opacity='1'; imgCromo.style.transform='scale(1) translateY(0)'; imgCromo.onload=null; };
+  if (imgCromo.complete && imgCromo.src) { imgCromo.style.opacity='1'; imgCromo.style.transform='scale(1) translateY(0)'; }
+  especialLabel.textContent = srcEsp ? '✶ CROMO ESPECIAL ✶' : '';
+  if (srcEsp) especialLabel.classList.add('visible'); else especialLabel.classList.remove('visible');
+  document.getElementById('revealText').textContent = p.texto || '';
+  document.getElementById('cursor').style.display = 'none';
+  document.getElementById('btnAnteriorWrap').style.display = 'flex';
+  document.getElementById('btnContinuar').style.display = nextToReveal < PLAYERS.length - 1 ? 'inline-block' : 'none';
+}
+
+function continuar() {
+  document.getElementById('btnContinuar').style.display = 'none';
+  showPlayer(nextToReveal);
+}
+
+function nextPlayer() { showPlayer((currentIndex + 1) % PLAYERS.length); }
+function prevPlayer() { showPlayer((currentIndex - 1 + PLAYERS.length) % PLAYERS.length); }
+
+function startShow() {
+  var splash = document.getElementById('splash');
+  splash.style.transition = 'opacity 0.8s ease';
+  splash.style.opacity = '0';
+  setTimeout(function() {
+    splash.style.display = 'none';
+    showPlayer(0);
+  }, 800);
+}
+
+window.addEventListener('load', function() {
+  // Auto-start after 4 seconds or on click
+  setTimeout(function() {
+    var splash = document.getElementById('splash');
+    if (splash && splash.style.display !== 'none') startShow();
+  }, 4000);
+});
+
+</script>
+</body>
+</html>.flash-overlay.flash { animation:flashAnim 0.4s ease-out forwards; }
+.flash-overlay.flash-epic { animation:flashEpic 0.8s ease-out forwards; }
+@keyframes flashAnim { 0%{opacity:0;background:white} 40%{opacity:0.7} 100%{opacity:0} }
+@keyframes flashEpic { 0%{opacity:0} 15%{opacity:1;background:radial-gradient(circle,#fff 0%,#FFD700 40%,#FF8C00 70%,transparent 100%)} 60%{opacity:0.6} 100%{opacity:0} }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.btn-anterior-wrap { display:none; gap:12px; justify-content:center; margin-top:16px; }
+.nav-dots { display:flex; flex-wrap:wrap; justify-content:center; gap:6px; margin-top:24px; }
+.dot { width:10px; height:10px; border-radius:50%; background:rgba(255,215,0,0.2); transition:all 0.3s; cursor:default; }
+.dot.active-dot { background:#FFD700; transform:scale(1.3); }
+.dot.done { background:rgba(255,215,0,0.45); }
+.dot.clickable { cursor:pointer; }
+.dot.clickable:hover { background:#FFD700; }
+.completed-banner { display:none; text-align:center; font-size:12px; letter-spacing:4px; color:#FFD700; padding:20px; border:1px solid rgba(255,215,0,0.3); border-radius:8px; margin-top:20px; font-family:Georgia,serif; }
+.completed-banner.visible { display:block; animation:fadeIn 1s ease; }
+.nav-buttons { display:none; gap:16px; margin-top:16px; justify-content:center; }
+.nav-buttons.visible { display:flex; }
+.btn-nav { background:rgba(0,0,0,0.5); border:1px solid rgba(255,215,0,0.4); color:#FFD700; padding:12px 28px; border-radius:8px; font-family:Impact,sans-serif; font-size:14px; letter-spacing:3px; cursor:pointer; transition:all 0.2s; }
+.btn-nav:hover { background:rgba(255,215,0,0.18); }
+@media(max-width:650px) { .two-col { grid-template-columns:1fr; } .col-texto { min-height:auto; } }
+</style>
+</head>
+<body>
+<div id="splash" style="position:fixed;inset:0;z-index:9000;background:#000;display:flex;align-items:center;justify-content:center;cursor:pointer;" onclick="startShow()">
+  <img src="capa_jardim.png" style="width:100%;height:100%;object-fit:cover;display:block;">
+</div>
+  </div>
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+</div>
+<div class="stage">
+  <div id="cromoWrap">
+    <div class="cromo-header">
+      <div class="counter-badge" id="counterBadge"></div>
+    </div>
+    <div class="two-col">
+      <div class="col-texto">
+        <span id="revealText"></span><span class="cursor" id="cursor" style="display:none"></span>
+      </div>
+      <div class="col-cromo">
+        <div class="card-wrap">
+          <img id="imgCromo" src="" alt="">
+        </div>
+        <div class="especial-label" id="especialLabel"></div>
+      </div>
+    </div>
+  </div>
+  <div class="btn-anterior-wrap" id="btnAnteriorWrap">
     <button class="btn-nav" onclick="navDurante(-1)">&#9664; ANTERIOR</button>
     <button class="btn-nav" id="btnContinuar" style="display:none" onclick="continuar()">&#9654; CONTINUAR</button>
     <button class="btn-nav" id="btnProximoD" style="display:none" onclick="navDurante(1)">PRÓXIMO &#9654;</button>
