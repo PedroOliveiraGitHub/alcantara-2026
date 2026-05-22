@@ -81,8 +81,9 @@ body::before { content:''; position:fixed; inset:0; background:rgba(0,0,0,0.78);
     </div>
   </div>
   <div class="btn-anterior-wrap" id="btnAnteriorWrap">
-    <button class="btn-nav" onclick="verAnterior()">&#9664; VER ANTERIOR</button>
-    <button class="btn-nav" id="btnContinuar" style="display:none" onclick="continuar()">CONTINUAR &#9654;</button>
+    <button class="btn-nav" onclick="navDurante(-1)">&#9664; ANTERIOR</button>
+    <button class="btn-nav" id="btnContinuar" style="display:none" onclick="continuar()">&#9654; CONTINUAR</button>
+    <button class="btn-nav" id="btnProximoD" style="display:none" onclick="navDurante(1)">PRÓXIMO &#9654;</button>
   </div>
   <div class="nav-dots" id="navDots"></div>
   <div class="completed-banner" id="completedBanner">&#127942; TODOS OS CROMOS REVELADOS &middot; AMIZADE É O NOSSO MUNDIAL &#127942;</div>
@@ -164,6 +165,7 @@ function buildDots() {
 function showPlayer(index) {
   currentIndex = index;
   nextToReveal = index;
+  browseIndex = -1;
   var p = PLAYERS[index];
   clearTimeout(autoTimer);
   clearTimeout(typingTimeout);
@@ -245,13 +247,27 @@ function showPlayer(index) {
               especialLabel.textContent = '✶ CROMO ESPECIAL ✶';
               especialLabel.classList.add('visible');
               lastRevealedIndex = playerIndex;
-              if (!allRevealed) document.getElementById('btnAnteriorWrap').style.display = 'flex';
+              browseIndex = playerIndex;
+              if (!allRevealed) {
+                document.getElementById('btnAnteriorWrap').style.display = 'flex';
+                document.getElementById('btnContinuar').style.display = 'none';
+                document.getElementById('btnProximoD').style.display = 'none';
+                var btnAnterior = document.querySelector('#btnAnteriorWrap .btn-nav');
+                btnAnterior.style.display = lastRevealedIndex > 1 ? 'inline-block' : 'none';
+              }
             }, 500);
           }, 300);
         }, 800);
       } else {
         lastRevealedIndex = playerIndex;
-        if (!allRevealed) document.getElementById('btnAnteriorWrap').style.display = 'flex';
+        browseIndex = playerIndex;
+        if (!allRevealed) {
+          document.getElementById('btnAnteriorWrap').style.display = 'flex';
+          document.getElementById('btnContinuar').style.display = 'none';
+          document.getElementById('btnProximoD').style.display = 'none';
+          var btnAnterior = document.querySelector('#btnAnteriorWrap .btn-nav');
+          btnAnterior.style.display = lastRevealedIndex > 1 ? 'inline-block' : 'none';
+        }
       }
     }
   }
@@ -284,11 +300,35 @@ function scheduleNext() {
   }, INTERVAL_MS);
 }
 
-function verAnterior() {
+// browseIndex = index being browsed during reveal (-1 = not browsing)
+var browseIndex = -1;
+
+function navDurante(dir) {
   clearTimeout(autoTimer);
   clearInterval(progressTimer);
   document.getElementById('progressFill').style.width = '0%';
-  if (lastRevealedIndex >= 0) showRevealed(lastRevealedIndex);
+
+  // Build list of revealed cromos (those with index <= lastRevealedIndex, not capa)
+  var revealed = [];
+  for (var i = 0; i < PLAYERS.length; i++) {
+    if (PLAYERS[i].tipo !== 'capa' && i <= lastRevealedIndex) revealed.push(i);
+  }
+  if (revealed.length === 0) return;
+
+  // Find current browse position
+  if (browseIndex < 0) browseIndex = lastRevealedIndex;
+  var pos = revealed.indexOf(browseIndex);
+  pos = Math.max(0, Math.min(revealed.length - 1, pos + dir));
+  browseIndex = revealed[pos];
+
+  showRevealed(browseIndex);
+
+  // Show/hide prev/next/continuar buttons
+  document.getElementById('btnAnteriorWrap').style.display = 'flex';
+  var btnAnterior = document.querySelector('#btnAnteriorWrap .btn-nav');
+  btnAnterior.style.display = pos > 0 ? 'inline-block' : 'none';
+  document.getElementById('btnProximoD').style.display = pos < revealed.length - 1 ? 'inline-block' : 'none';
+  document.getElementById('btnContinuar').style.display = 'inline-block';
 }
 
 function showRevealed(index) {
